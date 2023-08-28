@@ -30,7 +30,8 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     {
-      timestamps: false, // Desabilitar timestamps
+      timestamps: false,
+      tableName: 'users' // Desabilitar timestamps
     }
   );
   return userModel;

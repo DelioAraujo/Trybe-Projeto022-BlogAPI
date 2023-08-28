@@ -1,6 +1,7 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const loginValidation = require('./middlewares/LoginValidation');
+const userExist = require('./validations/userExist');
 
 const { JWT_SECRET } = process.env;
 // ...
@@ -14,9 +15,15 @@ app.get('/', (_request, response) => {
 
 app.use(express.json());
 
-// usa o middeware loginValidation antes de requisição
-app.post('/login', loginValidation, (req, res) => {
-  const { email } = req.body;
+// loginValidation verifica se o login foi preenchido
+app.post('/login', loginValidation, async (req, res) => {
+  const { email, password } = req.body;
+  // userExist verifica a existencia do usuário e senha no banco de dados
+  const userExists = await userExist(email, password);
+  // console.log(userExists);
+  if (userExists === false) {
+    return res.status(400).json({ message: 'Invalid fields' });
+}
 
   // gera o token usando email e a variável de ambiente
   const token = jwt.sign({
