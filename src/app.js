@@ -1,7 +1,9 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const loginValidation = require('./middlewares/LoginValidation');
-const userExist = require('./validations/userExist');
+const newUserValidation = require('./middlewares/newUserValidation');
+const { userExist, emailExist } = require('./validations/userExist');
+const { User } = require('./models');
 
 const { JWT_SECRET } = process.env;
 // ...
@@ -15,7 +17,6 @@ app.get('/', (_request, response) => {
 
 app.use(express.json());
 
-// loginValidation verifica se o login foi preenchido
 app.post('/login', loginValidation, async (req, res) => {
   const { email, password } = req.body;
   // userExist verifica a existencia do usuário e senha no banco de dados
@@ -32,6 +33,25 @@ app.post('/login', loginValidation, async (req, res) => {
 
   // reponde com o token gerado
   res.status(200).json({ token });
+});
+
+app.post('/user', newUserValidation, async (req, res) => {
+const { displayName, email, password } = req.body;
+
+const emailExists = await emailExist(email);
+if (emailExists) {
+  return res.status(409).json({ message: 'User already registered' });
+}
+console.log(displayName);
+await User.create({
+  displayName,
+  email,
+  password,
+});
+
+const token = jwt.sign({ email }, JWT_SECRET);
+
+res.status(201).json({ token });
 });
 
 // É importante exportar a constante `app`,

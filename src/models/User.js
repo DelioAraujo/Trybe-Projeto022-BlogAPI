@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
-      display_name: {
+      displayName: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -31,7 +31,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       timestamps: false,
-      tableName: 'users' // Desabilitar timestamps
+      tableName: 'users',
+      underscored: true // Desabilitar timestamps
     }
   );
   return userModel;
