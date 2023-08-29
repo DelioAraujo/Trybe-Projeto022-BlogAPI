@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       timestamps: false,
       tableName: 'categories',
-    //   underscored: true // Desabilitar timestamps
+    //   underscored: true // Desabilitar timestamps.
     }
   );
   return categoryModel;
