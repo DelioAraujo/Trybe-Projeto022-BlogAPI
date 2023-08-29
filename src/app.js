@@ -4,8 +4,9 @@ const loginValidation = require('./middlewares/LoginValidation');
 const newUserValidation = require('./middlewares/newUserValidation');
 const tokenValidation = require('./middlewares/tokenValidation');
 const { userExist, emailExist } = require('./validations/userExist');
-const { User, Category } = require('./models');
+const { User, Category, BlogPost, PostCategory } = require('./models');
 const newCategoryValidation = require('./middlewares/newCategoryValidation');
+const newPostValidation = require('./middlewares/newPostValidation');
 
 const { JWT_SECRET } = process.env;
 
@@ -82,6 +83,49 @@ app.get('/categories', tokenValidation, async (req, res) => {
   const categoriesList = await Category.findAll();
 
   res.status(200).json(categoriesList);
+});
+
+app.post('/post', tokenValidation, newPostValidation, async (req, res) => {
+const { title, content, categoryIds } = req.body;
+
+// const token = req.headers.authorization.split(' ')[1]; // Assumindo que o token está no formato "Bearer token"
+// const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+// // console.log("delio", decodedToken);
+// const { email } = decodedToken;
+// const user = await User.findByEmail(email);
+// console.log('delio', user);
+
+// pega a lista de todas categorias.
+const categoriesList = await Category.findAll();
+
+// faz um array com todos ids
+const categoriesIdsList = categoriesList.map((category) => category.id);
+
+// confere se os ids que vieram na requisição estão presentes no array
+const allCategoryIdsExists = categoryIds.every((item) => categoriesIdsList.includes(item));
+
+if (!allCategoryIdsExists) {
+  return res.status(400).json({ message: 'one or more "categoryIds" not found' });
+}
+
+// cria o novo post
+const newPost = await BlogPost.create({
+  title,
+  content,
+  userId: 1,
+  // published: new Date(),
+  // updated: new Date(),
+});
+
+// Cria entradas correspondentes na tabela PostCategory.
+const postCategories = categoryIds.map((categoryId) => ({
+  postId: newPost.id,
+  categoryId,
+}));
+
+await PostCategory.bulkCreate(postCategories);
+
+return res.status(201).json(newPost);
 });
 
 module.exports = app;
