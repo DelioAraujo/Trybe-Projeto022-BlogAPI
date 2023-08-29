@@ -6,7 +6,6 @@ const tokenValidation = require('./middlewares/tokenValidation');
 const { userExist, emailExist } = require('./validations/userExist');
 const { User, Category } = require('./models');
 const newCategoryValidation = require('./middlewares/newCategoryValidation');
-const { json } = require('sequelize');
 
 const { JWT_SECRET } = process.env;
 
