@@ -78,4 +78,10 @@ const newCategory = await Category.create({ name });
 return res.status(201).json(newCategory);
 });
 
+app.get('/categories', tokenValidation, async (req, res) => {
+  const categoriesList = await Category.findAll();
+
+  res.status(200).json(categoriesList);
+});
+
 module.exports = app;
