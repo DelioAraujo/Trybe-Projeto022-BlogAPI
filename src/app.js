@@ -2,20 +2,18 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const loginValidation = require('./middlewares/LoginValidation');
 const newUserValidation = require('./middlewares/newUserValidation');
+const tokenValidation = require('./middlewares/tokenValidation');
 const { userExist, emailExist } = require('./validations/userExist');
 const { User } = require('./models');
 
 const { JWT_SECRET } = process.env;
-// ...
 
 const app = express();
-
+app.use(express.json());
 // não remova ou mova esse endpoint
 app.get('/', (_request, response) => {
   response.send();
 });
-
-app.use(express.json());
 
 app.post('/login', loginValidation, async (req, res) => {
   const { email, password } = req.body;
@@ -42,7 +40,7 @@ const emailExists = await emailExist(email);
 if (emailExists) {
   return res.status(409).json({ message: 'User already registered' });
 }
-console.log(displayName);
+
 await User.create({
   displayName,
   email,
@@ -54,6 +52,10 @@ const token = jwt.sign({ email }, JWT_SECRET);
 res.status(201).json({ token });
 });
 
-// É importante exportar a constante `app`,
-// para que possa ser utilizada pelo arquivo `src/server.js`
+app.get('/user', tokenValidation, async (req, res) => {
+const usersList = await User.findAll({ attributes: { exclude: ['password'] } });
+
+res.status(200).json(usersList);
+});
+
 module.exports = app;
