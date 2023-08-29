@@ -1,7 +1,5 @@
 "use strict";
 
-const { Model, Sequelize } = require("sequelize");
-
 module.exports = (sequelize, DataTypes) => {
   const userModel = sequelize.define(
     "User",
@@ -35,5 +33,10 @@ module.exports = (sequelize, DataTypes) => {
       underscored: true // Desabilitar timestamps
     }
   );
+
+  userModel.associate = (models) => {
+    userModel.hasMany(models.BlogPost, { foreignKey: 'userId', as: 'user' });
+  };
+
   return userModel;
 };
