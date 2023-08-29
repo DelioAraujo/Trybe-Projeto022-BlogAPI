@@ -4,7 +4,9 @@ const loginValidation = require('./middlewares/LoginValidation');
 const newUserValidation = require('./middlewares/newUserValidation');
 const tokenValidation = require('./middlewares/tokenValidation');
 const { userExist, emailExist } = require('./validations/userExist');
-const { User } = require('./models');
+const { User, Category } = require('./models');
+const newCategoryValidation = require('./middlewares/newCategoryValidation');
+const { json } = require('sequelize');
 
 const { JWT_SECRET } = process.env;
 
@@ -67,6 +69,14 @@ app.get('/user/:id', tokenValidation, async (req, res) => {
   return res.status(404).json({ message: 'User does not exist' });
 }
 return res.status(200).json(user);
+});
+
+app.post('/categories', tokenValidation, newCategoryValidation, async (req, res) => {
+const { name } = req.body;
+
+const newCategory = await Category.create({ name });
+
+return res.status(201).json(newCategory);
 });
 
 module.exports = app;
