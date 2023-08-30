@@ -1,13 +1,13 @@
 const express = require('express');
 // const jwt = require('jsonwebtoken');
-const { loginRoutes, userRoutes, categoryRoutes, postRoutes } = require('./routs');
+const { loginRoutes, userRoutes, categoryRoutes } = require('./routs');
 // const loginValidation = require('./middlewares/LoginValidation');
 // const newUserValidation = require('./middlewares/newUserValidation');
 const tokenValidation = require('./middlewares/tokenValidation');
 // const {
 //   userExist,
 //   emailExist } = require('./validations/userExist');
-const { User, Category, BlogPost, PostCategory } = require('./models');
+const { Category, BlogPost, PostCategory } = require('./models');
 // const newCategoryValidation = require('./middlewares/newCategoryValidation');
 const newPostValidation = require('./middlewares/newPostValidation');
 
