@@ -1,14 +1,17 @@
 const express = require('express');
-const jwt = require('jsonwebtoken');
-const loginValidation = require('./middlewares/LoginValidation');
-const newUserValidation = require('./middlewares/newUserValidation');
-const tokenValidation = require('./middlewares/tokenValidation');
-const { userExist, emailExist } = require('./validations/userExist');
-const { User, Category, BlogPost, PostCategory } = require('./models');
-const newCategoryValidation = require('./middlewares/newCategoryValidation');
-const newPostValidation = require('./middlewares/newPostValidation');
+// const jwt = require('jsonwebtoken');
+const { loginRoutes } = require('./routs');
+// const loginValidation = require('./middlewares/LoginValidation');
+// const newUserValidation = require('./middlewares/newUserValidation');
+// const tokenValidation = require('./middlewares/tokenValidation');
+// const {
+//   userExist,
+//   emailExist } = require('./validations/userExist');
+// const { User, Category, BlogPost, PostCategory } = require('./models');
+// const newCategoryValidation = require('./middlewares/newCategoryValidation');
+// const newPostValidation = require('./middlewares/newPostValidation');
 
-const { JWT_SECRET } = process.env;
+// const { JWT_SECRET } = process.env;
 
 const app = express();
 app.use(express.json());
@@ -17,115 +20,117 @@ app.get('/', (_request, response) => {
   response.send();
 });
 
-app.post('/login', loginValidation, async (req, res) => {
-  const { email, password } = req.body;
-  // userExist verifica a existencia do usuário e senha no banco de dados
-  const userExists = await userExist(email, password);
-  // console.log(userExists);
-  if (userExists === false) {
-    return res.status(400).json({ message: 'Invalid fields' });
-}
+app.use('/login', loginRoutes);
 
-  // gera o token usando email e a variável de ambiente
-  const token = jwt.sign({
-    email,
-  }, JWT_SECRET);
+// app.post('/login', loginValidation, async (req, res) => {
+//   const { email, password } = req.body;
+//   // userExist verifica a existencia do usuário e senha no banco de dados
+//   const userExists = await userExist(email, password);
+//   // console.log(userExists);
+//   if (userExists === false) {
+//     return res.status(400).json({ message: 'Invalid fields' });
+// }
 
-  // reponde com o token gerado
-  res.status(200).json({ token });
-});
+//   // gera o token usando email e a variável de ambiente
+//   const token = jwt.sign({
+//     email,
+//   }, JWT_SECRET);
 
-app.post('/user', newUserValidation, async (req, res) => {
-const { displayName, email, password } = req.body;
+//   // reponde com o token gerado
+//   res.status(200).json({ token });
+// });
 
-const emailExists = await emailExist(email);
-if (emailExists) {
-  return res.status(409).json({ message: 'User already registered' });
-}
+// app.post('/user', newUserValidation, async (req, res) => {
+// const { displayName, email, password } = req.body;
 
-await User.create({
-  displayName,
-  email,
-  password,
-});
+// const emailExists = await emailExist(email);
+// if (emailExists) {
+//   return res.status(409).json({ message: 'User already registered' });
+// }
 
-const token = jwt.sign({ email }, JWT_SECRET);
+// await User.create({
+//   displayName,
+//   email,
+//   password,
+// });
 
-res.status(201).json({ token });
-});
+// const token = jwt.sign({ email }, JWT_SECRET);
 
-app.get('/user', tokenValidation, async (req, res) => {
-const usersList = await User.findAll({ attributes: { exclude: ['password'] } });
+// res.status(201).json({ token });
+// });
 
-res.status(200).json(usersList);
-});
+// app.get('/user', tokenValidation, async (req, res) => {
+// const usersList = await User.findAll({ attributes: { exclude: ['password'] } });
 
-app.get('/user/:id', tokenValidation, async (req, res) => {
- const { id } = req.params;
+// res.status(200).json(usersList);
+// });
 
- const user = await User.findByPk(id, { attributes: { exclude: ['password'] } });
+// app.get('/user/:id', tokenValidation, async (req, res) => {
+//  const { id } = req.params;
 
- if (!user) {
-  return res.status(404).json({ message: 'User does not exist' });
-}
-return res.status(200).json(user);
-});
+//  const user = await User.findByPk(id, { attributes: { exclude: ['password'] } });
 
-app.post('/categories', tokenValidation, newCategoryValidation, async (req, res) => {
-const { name } = req.body;
+//  if (!user) {
+//   return res.status(404).json({ message: 'User does not exist' });
+// }
+// return res.status(200).json(user);
+// });
 
-const newCategory = await Category.create({ name });
+// app.post('/categories', tokenValidation, newCategoryValidation, async (req, res) => {
+// const { name } = req.body;
 
-return res.status(201).json(newCategory);
-});
+// const newCategory = await Category.create({ name });
 
-app.get('/categories', tokenValidation, async (req, res) => {
-  const categoriesList = await Category.findAll();
+// return res.status(201).json(newCategory);
+// });
 
-  res.status(200).json(categoriesList);
-});
+// app.get('/categories', tokenValidation, async (req, res) => {
+//   const categoriesList = await Category.findAll();
 
-app.post('/post', tokenValidation, newPostValidation, async (req, res) => {
-const { title, content, categoryIds } = req.body;
+//   res.status(200).json(categoriesList);
+// });
 
-// const token = req.headers.authorization.split(' ')[1]; // Assumindo que o token está no formato "Bearer token"
-// const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-// // console.log("delio", decodedToken);
-// const { email } = decodedToken;
-// const user = await User.findByEmail(email);
-// console.log('delio', user);
+// app.post('/post', tokenValidation, newPostValidation, async (req, res) => {
+// const { title, content, categoryIds } = req.body;
 
-// pega a lista de todas categorias.
-const categoriesList = await Category.findAll();
+// // const token = req.headers.authorization.split(' ')[1]; // Assumindo que o token está no formato "Bearer token"
+// // const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+// // // console.log("delio", decodedToken);
+// // const { email } = decodedToken;
+// // const user = await User.findByEmail(email);
+// // console.log('delio', user);
 
-// faz um array com todos ids
-const categoriesIdsList = categoriesList.map((category) => category.id);
+// // pega a lista de todas categorias.
+// const categoriesList = await Category.findAll();
 
-// confere se os ids que vieram na requisição estão presentes no array
-const allCategoryIdsExists = categoryIds.every((item) => categoriesIdsList.includes(item));
+// // faz um array com todos ids
+// const categoriesIdsList = categoriesList.map((category) => category.id);
 
-if (!allCategoryIdsExists) {
-  return res.status(400).json({ message: 'one or more "categoryIds" not found' });
-}
+// // confere se os ids que vieram na requisição estão presentes no array
+// const allCategoryIdsExists = categoryIds.every((item) => categoriesIdsList.includes(item));
 
-// cria o novo post
-const newPost = await BlogPost.create({
-  title,
-  content,
-  userId: 1,
-  // published: new Date(),
-  // updated: new Date(),
-});
+// if (!allCategoryIdsExists) {
+//   return res.status(400).json({ message: 'one or more "categoryIds" not found' });
+// }
 
-// Cria entradas correspondentes na tabela PostCategory.
-const postCategories = categoryIds.map((categoryId) => ({
-  postId: newPost.id,
-  categoryId,
-}));
+// // cria o novo post
+// const newPost = await BlogPost.create({
+//   title,
+//   content,
+//   userId: 1,
+//   // published: new Date(),
+//   // updated: new Date(),
+// });
 
-await PostCategory.bulkCreate(postCategories);
+// // Cria entradas correspondentes na tabela PostCategory.
+// const postCategories = categoryIds.map((categoryId) => ({
+//   postId: newPost.id,
+//   categoryId,
+// }));
 
-return res.status(201).json(newPost);
-});
+// await PostCategory.bulkCreate(postCategories);
+
+// return res.status(201).json(newPost);
+// });
 
 module.exports = app;
