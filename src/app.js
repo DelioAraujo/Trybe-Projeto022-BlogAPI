@@ -1,13 +1,13 @@
 const express = require('express');
 // const jwt = require('jsonwebtoken');
-const { loginRoutes } = require('./routs');
+const { loginRoutes, userRoutes } = require('./routs');
 // const loginValidation = require('./middlewares/LoginValidation');
 // const newUserValidation = require('./middlewares/newUserValidation');
-// const tokenValidation = require('./middlewares/tokenValidation');
+const tokenValidation = require('./middlewares/tokenValidation');
 // const {
 //   userExist,
 //   emailExist } = require('./validations/userExist');
-// const { User, Category, BlogPost, PostCategory } = require('./models');
+const { User, Category, BlogPost, PostCategory } = require('./models');
 // const newCategoryValidation = require('./middlewares/newCategoryValidation');
 // const newPostValidation = require('./middlewares/newPostValidation');
 
@@ -19,7 +19,7 @@ app.use(express.json());
 app.get('/', (_request, response) => {
   response.send();
 });
-
+// -----------------------------------------------------------------------------------------------------------
 app.use('/login', loginRoutes);
 
 // app.post('/login', loginValidation, async (req, res) => {
@@ -39,7 +39,8 @@ app.use('/login', loginRoutes);
 //   // reponde com o token gerado
 //   res.status(200).json({ token });
 // });
-
+// -----------------------------------------------------------------------------------------------------------
+app.use('/user', userRoutes);
 // app.post('/user', newUserValidation, async (req, res) => {
 // const { displayName, email, password } = req.body;
 
@@ -58,13 +59,13 @@ app.use('/login', loginRoutes);
 
 // res.status(201).json({ token });
 // });
-
+// -----------------------------------------------------------------------------------------------------------
 // app.get('/user', tokenValidation, async (req, res) => {
 // const usersList = await User.findAll({ attributes: { exclude: ['password'] } });
 
 // res.status(200).json(usersList);
 // });
-
+// -----------------------------------------------------------------------------------------------------------
 // app.get('/user/:id', tokenValidation, async (req, res) => {
 //  const { id } = req.params;
 
@@ -75,7 +76,7 @@ app.use('/login', loginRoutes);
 // }
 // return res.status(200).json(user);
 // });
-
+// -----------------------------------------------------------------------------------------------------------
 // app.post('/categories', tokenValidation, newCategoryValidation, async (req, res) => {
 // const { name } = req.body;
 
@@ -83,13 +84,13 @@ app.use('/login', loginRoutes);
 
 // return res.status(201).json(newCategory);
 // });
-
+// -----------------------------------------------------------------------------------------------------------
 // app.get('/categories', tokenValidation, async (req, res) => {
 //   const categoriesList = await Category.findAll();
 
 //   res.status(200).json(categoriesList);
 // });
-
+// -----------------------------------------------------------------------------------------------------------
 // app.post('/post', tokenValidation, newPostValidation, async (req, res) => {
 // const { title, content, categoryIds } = req.body;
 
