@@ -1,13 +1,13 @@
 const express = require('express');
 // const jwt = require('jsonwebtoken');
-const { loginRoutes, userRoutes } = require('./routs');
+const { loginRoutes, userRoutes, categoryRoutes } = require('./routs');
 // const loginValidation = require('./middlewares/LoginValidation');
 // const newUserValidation = require('./middlewares/newUserValidation');
-const tokenValidation = require('./middlewares/tokenValidation');
+// const tokenValidation = require('./middlewares/tokenValidation');
 // const {
 //   userExist,
 //   emailExist } = require('./validations/userExist');
-const { User, Category, BlogPost, PostCategory } = require('./models');
+// const { User, Category, BlogPost, PostCategory } = require('./models');
 // const newCategoryValidation = require('./middlewares/newCategoryValidation');
 // const newPostValidation = require('./middlewares/newPostValidation');
 
@@ -65,7 +65,7 @@ app.use('/user', userRoutes);
 
 // res.status(200).json(usersList);
 // });
-// -----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------ok
   // app.get('/user/:id', tokenValidation, async (req, res) => {
   // const { id } = req.params;
 
@@ -77,6 +77,8 @@ app.use('/user', userRoutes);
   // return res.status(200).json(user);
   // });
 // -----------------------------------------------------------------------------------------------------------
+app.use('/categories', categoryRoutes);
+
 // app.post('/categories', tokenValidation, newCategoryValidation, async (req, res) => {
 // const { name } = req.body;
 
