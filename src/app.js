@@ -76,7 +76,7 @@ app.use('/user', userRoutes);
   // }
   // return res.status(200).json(user);
   // });
-// -----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------ok
 app.use('/categories', categoryRoutes);
 
 // app.post('/categories', tokenValidation, newCategoryValidation, async (req, res) => {
@@ -86,7 +86,7 @@ app.use('/categories', categoryRoutes);
 
 // return res.status(201).json(newCategory);
 // });
-// -----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------ok
 // app.get('/categories', tokenValidation, async (req, res) => {
 //   const categoriesList = await Category.findAll();
 
