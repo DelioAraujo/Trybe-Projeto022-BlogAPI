@@ -19,7 +19,7 @@ app.use(express.json());
 app.get('/', (_request, response) => {
   response.send();
 });
-// -----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------ok
 app.use('/login', loginRoutes);
 
 // app.post('/login', loginValidation, async (req, res) => {
@@ -39,7 +39,7 @@ app.use('/login', loginRoutes);
 //   // reponde com o token gerado
 //   res.status(200).json({ token });
 // });
-// -----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------ok
 app.use('/user', userRoutes);
 // app.post('/user', newUserValidation, async (req, res) => {
 // const { displayName, email, password } = req.body;
@@ -59,23 +59,23 @@ app.use('/user', userRoutes);
 
 // res.status(201).json({ token });
 // });
-// -----------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------ok
 // app.get('/user', tokenValidation, async (req, res) => {
 // const usersList = await User.findAll({ attributes: { exclude: ['password'] } });
 
 // res.status(200).json(usersList);
 // });
 // -----------------------------------------------------------------------------------------------------------
-// app.get('/user/:id', tokenValidation, async (req, res) => {
-//  const { id } = req.params;
+  // app.get('/user/:id', tokenValidation, async (req, res) => {
+  // const { id } = req.params;
 
-//  const user = await User.findByPk(id, { attributes: { exclude: ['password'] } });
+  // const user = await User.findByPk(id, { attributes: { exclude: ['password'] } });
 
-//  if (!user) {
-//   return res.status(404).json({ message: 'User does not exist' });
-// }
-// return res.status(200).json(user);
-// });
+  // if (!user) {
+  //   return res.status(404).json({ message: 'User does not exist' });
+  // }
+  // return res.status(200).json(user);
+  // });
 // -----------------------------------------------------------------------------------------------------------
 // app.post('/categories', tokenValidation, newCategoryValidation, async (req, res) => {
 // const { name } = req.body;

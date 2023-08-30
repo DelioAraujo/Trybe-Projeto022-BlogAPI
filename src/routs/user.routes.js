@@ -6,5 +6,6 @@ const tokenValidation = require('../middlewares/tokenValidation');
 
 route.post('/', newUserValidation, userController.createUser);
 route.get('/', tokenValidation, userController.findAll);
+route.get('/:id', tokenValidation, userController.findById);
 
 module.exports = route;
