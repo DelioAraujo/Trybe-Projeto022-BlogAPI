@@ -1,44 +1,38 @@
-// const { Category, BlogPost, PostCategory } = require('../models');
+const { Category, BlogPost, PostCategory } = require('../models');
 
-// const createPost = async (title, content, categoryIds) => {
-//     // pega a lista de todas categorias.
-//     const categoriesList = await Category.findAll();
+const createPost = async (title, content, categoryIds) => {
+  // pega a lista de todas categorias.
+  const categoriesList = await Category.findAll();
 
-//     // faz um array com todos ids
-//     const categoriesIdsList = categoriesList.map((category) => category.id);
+  // faz um array com todos ids
+  const categoriesIdsList = categoriesList.map((category) => category.id);
 
-//     // confere se os ids que vieram na requisição estão presentes no array
-//     const allCategoryIdsExists = categoryIds.every((item) => categoriesIdsList.includes(item));
-//     if (!allCategoryIdsExists) {
-//           return {
-//             status: 400,
-//             message: 'one or more "categoryIds" not found',
-//           };
-//     }
+  // confere se os ids que vieram na requisição estão presentes no array
+  const allCategoryIdsExists = categoryIds.every((item) => categoriesIdsList.includes(item));
 
-//     // cria o novo post
-//     const newPost = await BlogPost.create({
-//     title,
-//     content,
-//     userId: 1,
-//     // published: new Date(),
-//     // updated: new Date(),
-//     });
+  if (!allCategoryIdsExists) {
+    return {
+      status: 400,
+      message: 'one or more "categoryIds" not found',
+    };
+  }
 
-//     // Cria entradas correspondentes na tabela PostCategory.
-//     const postCategories = categoryIds.map((categoryId) => ({
-//     postId: newPost.id,
-//     categoryId,
-//     }));
+  // cria o novo post
+  const newPost = await BlogPost.create({ title,
+    content,
+    userId: 1,
+    // published: new Date(),
+    // updated: new Date(),
+  });
 
-//     await PostCategory.bulkCreate(postCategories);
+  // Cria entradas correspondentes na tabela PostCategory.
+  const postCategories = categoryIds.map((categoryId) => ({ postId: newPost.id, categoryId }));
 
-//     return {
-//         status: 201,
-//         data: newPost,
-//     };
-// };
+  await PostCategory.bulkCreate(postCategories);
 
-// module.exports = {
-//     createPost,
-// };
+  return { status: 201, data: newPost };
+};
+
+module.exports = {
+  createPost,
+};
