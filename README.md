@@ -10,4 +10,4 @@
 
 - É necessária a utilização de categorias para os posts, trabalhando, assim, a relação de posts para categories e de categories para posts.
 
-- Para rodas a aplicação na máquina foi utilizado Docker
+- Para rodar a aplicação na máquina, foi utilizado Docker
